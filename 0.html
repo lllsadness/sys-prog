@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список дел</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header, .footer {
+            text-align: center;
+        }
+        .footer {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            font-size: 12px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .taskItem {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .taskItem span {
+            margin-right: 10px;
+        }
+        .deleteButton {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">Список дел</h1>
+        <input type="text" id="taskInput" class="taskInput" placeholder="Введите ваше дело">
+        <button id="addButton" class="btn">Создать</button>
+        <button id="deleteButton" class="btn">Удалить все</button>
+        <ul id="taskList" class="taskList">
+        </ul>
+    </div>
+    <div class="footer">
+        <hr>
+        <p>&copy; <span id="year"></span> Мой список дел</p>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const addButton = document.getElementById('addButton');
+        const deleteButton = document.getElementById('deleteButton');
+        const taskList = document.getElementById('taskList');
+        const yearSpan = document.getElementById('year');
+
+        let taskId = 1;
+
+        addButton.addEventListener('click', function() {
+            const taskText = taskInput.value.trim();
+            if (taskText !== '') {
+                const date = new Date().toLocaleDateString();
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('taskItem');
+                taskItem.innerHTML = `
+                    <span>${taskId}</span>
+                    <sub>${date}</sub>
+                    <input type="checkbox">
+                    <span>${taskText}</span>
+                    <button class="deleteButton">❌</button>
+                `;
+                taskList.appendChild(taskItem);
+                taskId++;
+                taskInput.value = '';
+            }
+        });
+
+        deleteButton.addEventListener('click', function() {
+            taskList.innerHTML = '';
+            taskId = 1;
+        });
+
+        taskList.addEventListener('click', function(event) {
+            if (event.target.classList.contains('deleteButton')) {
+                event.target.parentElement.remove();
+                taskId--; // Уменьшаем значение счетчика при удалении дела
+            }
+        });
+
+        yearSpan.textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
